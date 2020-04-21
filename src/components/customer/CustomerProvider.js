@@ -4,29 +4,29 @@ import React, { useState, useEffect } from "react"
     The context is imported and used by individual components
     that need data
 */
-export const LocationContext = React.createContext()
+export const CustomerContext = React.createContext()
 
 /*
  This component establishes what data can be used.
  */
-export const LocationProvider = (props) => {
-    const [locations, setLocations] = useState([])
+export const CustomerProvider = (props) => {
+    const [customers, setCustomers] = useState([])
 
-    const getLocations = () => {
-        return fetch("http://localhost:8088/locations")
+    const getCustomers = () => {
+        return fetch("http://localhost:8088/customers")
             .then(res => res.json())
-            .then(setLocations)
+            .then(setCustomers)
     }
 
-    const addLocation = location => {
-        return fetch("http://localhost:8088/locations", {
+    const addCustomers = customer => {
+        return fetch("http://localhost:8088/customers", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify(location)
+            body: JSON.stringify(customer)
         })
-            .then(getLocations)
+            .then(getCustomers)
     }
 
     /*
@@ -34,18 +34,18 @@ export const LocationProvider = (props) => {
         an empty array is the second argument to avoid infinite loop.
     */
     useEffect(() => {
-        getLocations()
+        getCustomers()
     }, [])
 
     useEffect(() => {
         console.log("****  LOCATION APPLICATION STATE CHANGED  ****")
-    }, [locations])
+    }, [customers])
 
     return (
-        <LocationContext.Provider value={{
-            locations, addLocation
+        <CustomerContext.Provider value={{
+            customers, addCustomers
         }}>
             {props.children}
-        </LocationContext.Provider>
+        </CustomerContext.Provider>
     )
 }

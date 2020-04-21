@@ -10,6 +10,8 @@ export const AnimalContext = React.createContext()
  This component establishes what data can be used.
  */
 export const AnimalProvider = (props) => {
+      // animals = data
+    // setAnimals = function that React created, so we can use it to set state of animals
     const [animals, setAnimals] = useState([])
 
     const getAnimals = () => {
@@ -18,7 +20,7 @@ export const AnimalProvider = (props) => {
             .then(setAnimals)
     }
 
-    const addAnimal = location => {
+    const addAnimal = animal => {
         return fetch("http://localhost:8088/animals", {
             method: "POST",
             headers: {
@@ -37,12 +39,17 @@ export const AnimalProvider = (props) => {
         getAnimals()
     }, [])
 
+    
+    /*
+        Watching the state of animals, console.logs when the state has changed
+    */
+   
     useEffect(() => {
         console.log("****  LOCATION APPLICATION STATE CHANGED  ****")
     }, [animals])
 
     return (
-        <LocationContext.Provider value={{
+        <AnimalContext.Provider value={{
             animals, addAnimal
         }}>
             {props.children}
