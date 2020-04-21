@@ -1,10 +1,14 @@
 import React from "react"
-import Animal from "./animal/Animal"
+
+import { AnimalProvider } from "./animal/AnimalProvider"
+import AnimalList from "./animal/AnimalList"
 import "./animal/Animals.css"
 import Employee from "./employee/Employee"
-import "./employee.Employees.css"
-import Location from "./location/Location"
-import "./location.Locations.css"
+import "./employee/Employees.css"
+import { LocationProvider } from "./location/LocationProvider"
+import LocationList from "./location/LocationList"
+
+import "./location/Locations.css"
 import Customer from "./customer/Customer"
 import "./customer/Customers.css"
 export default () => (
@@ -18,11 +22,11 @@ export default () => (
         </address>
 
         <h2>Animals</h2>
-        <article className="animals">
-            <Animal />
-            <Animal />
-            <Animal />
-        </article>
+       <AnimalProvider>
+           <AnimalList />
+       </AnimalProvider>
+           
+       
 
         <h2>Employees</h2>
         <article className="employees">
@@ -33,11 +37,11 @@ export default () => (
 
         
         <h2>Locations</h2>
-        <article className="locations">
-            <Location />
-            <Location />
-           
-        </article>
+        
+        <LocationProvider>
+            <LocationList />
+        </LocationProvider>
+       
 
         <h2>Customers</h2>
         <article className="customers">
