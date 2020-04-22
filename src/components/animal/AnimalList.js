@@ -12,22 +12,20 @@ export default () => {
     const { animals } = useContext(AnimalContext)
     const { locations } = useContext(LocationContext)
     const { customers } = useContext(CustomerContext)
+    {/* use .find() on customers and locations arrays to find the object representation that each foreign key references */}
     return (
         <div className="animals">
-
-        {/* use .find() on customers and locations arrays to find the object representation that each foreign key references */}
-
         {
             animals.map(ani => {
-                const matchingPetOwner = customers.find(customer => customer.id === ani.customerId)
-                const matchingVetClinic = locations.find (location => location.id === ani.locationId)
+                const matchingPetOwner = customers.find(c => c.id === ani.customerId)
+                const matchingVetClinic = locations.find (l => l.id === ani.locationId)
             
             return <Animal key={ani.id} 
             location={matchingVetClinic}
             customer={matchingPetOwner}
             animal={ani} />
         })
-    }
+}
         </div>
     )
 }
