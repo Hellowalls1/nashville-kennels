@@ -18,7 +18,7 @@ export default () => {
 
     return (
         <>
-            <h2>Employees</h2>
+            <h2>Employees:</h2>
 
             {/* onClick is the click event on the New Employee fake hyperlink */}
 
