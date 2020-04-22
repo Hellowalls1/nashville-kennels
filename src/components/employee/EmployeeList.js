@@ -1,20 +1,49 @@
-import React, { useContext } from "react"
-import "./Employees.css"
-import { EmployeeContext } from "./EmployeeProvider" //importing context object from Provider
+import React, { useContext, useState } from "react"
+import { EmployeeContext } from "./EmployeeProvider"
 import Employee from "./Employee"
+import { LocationContext } from "../location/LocationProvider"
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap"
+import EmployeeForm from "./EmployeeForm"
+
 
 export default () => {
 
-    //Brings in Array of Locations/ useContext() hook allows you to use data structures and functions that a parent provider component exposes
-    /* use the .map() array method to iterate the array of employees and generate HTML for each one by invoking the Animal component function */
+    //bringing in the data from providers and storing it into variables
     const { employees } = useContext(EmployeeContext)
+    const { locations } = useContext(LocationContext)
+
+    //setting the modal state as false (inactive) so that way it can be toggled on 
+    const [modal, setModal] = useState(false)
+    const toggle = () => setModal(!modal)
 
     return (
-        <div className="employees">
+        <>
+            <h2>Employees</h2>
 
-        {
-            employees.map(emp => <Employee key={emp.id} employee={emp} />) 
-        }
-        </div>
+            {/* onClick is the click event on the New Employee fake hyperlink */}
+
+            <div className="fakeLink href" onClick={toggle}>New Employee</div>
+
+            {/* maping over each individual employee and finding the employee object representation of the employee who matches the location id? */}
+            <ul className="employees">
+                {
+                    employees.map(employee => {
+                        const loc = locations.find(l => l.id === employee.locationId)
+
+                        return <Employee key={employee.id} location={loc} employee={employee} />
+                    })
+                }
+            </ul>
+
+            {/* Modal representation {toggle} is being called from line 17 and is toggling the visability of modal */}
+            <Modal isOpen={modal} toggle={toggle}>
+                <ModalHeader toggle={toggle}>
+                    New Employee
+                </ModalHeader>
+                <ModalBody>
+                    <EmployeeForm toggler={toggle} />
+                </ModalBody>
+            </Modal>
+        </>
     )
 }
