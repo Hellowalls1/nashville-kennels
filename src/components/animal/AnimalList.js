@@ -4,7 +4,9 @@ import { AnimalContext } from "./AnimalProvider" //importing the context object 
 import { CustomerContext } from "../customer/CustomerProvider"
 import { Button, Modal, ModalBody, ModalHeader } from "reactstrap"
 import Animal from "./Animal"
+
 import "./Animals.css"
+import AnimalForm from "./AnimalForm"
 
 export default () => {
 
@@ -50,7 +52,7 @@ export default () => {
                     New Animal
                 </ModalHeader>
                 <ModalBody>
-                    <AnimalForm toggler={toggle}/>   {/* animal form needs to toggle the modal*/}
+                    <AnimalForm toggle={toggle}/>   {/* animal form needs to toggle the modal this is imported from AnimalForm*/}
                 </ModalBody>
             </Modal>
         </>
