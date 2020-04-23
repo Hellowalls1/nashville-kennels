@@ -22,6 +22,8 @@ const Register = props => {
     const handleRegister = (e) => {
         e.preventDefault()
 
+        //creating the user
+
         if (password.current.value === verifyPassword.current.value) {
             existingUserCheck()
                 .then(() => {
@@ -36,10 +38,14 @@ const Register = props => {
                             name: `${firstName.current.value} ${lastName.current.value}`
                         })
                     })
+
+                    // after you create the user you put their id in local storage then toggle the object via props line 4
+
                         .then(_ => _.json())
                         .then(createdUser => {
                             if (createdUser.hasOwnProperty("id")) {
                                 localStorage.setItem("kennel_customer", createdUser.id)
+                                props.toggle() //line 4
                             }
                         })
                 })
