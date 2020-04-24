@@ -36,6 +36,7 @@ export default () => {
         {
             animals.map(ani => {
                 const matchingPetOwner = customers.find(c => c.id === ani.customerId)
+                
                 const matchingVetClinic = locations.find (l => l.id === ani.locationId)
             
             return <Animal key={ani.id} 

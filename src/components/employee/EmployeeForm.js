@@ -12,7 +12,7 @@ export default props => {
     const location = useRef()
     const address = useRef()
 
-    //parseInt because everything must becaues data from the DOM is in a string and must be converted to a integer
+    //function that is creating a new employee parseInt because everything must becaues data from the DOM is in a string and must be converted to a integer
     const constructNewEmployee = () => {
         const locationId = parseInt(location.current.value)
 
@@ -26,6 +26,7 @@ export default props => {
                 name: name.current.value,
                 locationId: locationId,
                 address: address.current.value
+                
             })
             .then(props.toggler)
         }
