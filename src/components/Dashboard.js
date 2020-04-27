@@ -4,7 +4,7 @@ import LocationList from "./location/LocationList"
 import { EmployeeProvider } from "./employee/EmployeeProvider"
 import EmployeeList from "./employee/EmployeeList"
 import { AnimalProvider } from "./animal/AnimalProvider"
-import AnimalList from "./animal/AnimalList"
+//animal list was removed to make animals solely searchable
 import { CustomerProvider } from "./customer/CustomerProvider"
 import CustomerList from "./customer/CustomerList"
 import { SearchBar } from "./search/SearchBar"
