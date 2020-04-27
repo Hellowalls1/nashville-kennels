@@ -1,6 +1,6 @@
 
 import React, { useState } from "react"
-import Dashboard from "./Dashboard"
+import { Dashboard } from "./Dashboard"
 import Auth from "./auth/Auth"
 
 export default () => {
