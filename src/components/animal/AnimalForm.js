@@ -1,81 +1,71 @@
-import React, { useContext, useRef } from "react"
-import { LocationContext } from "../location/LocationProvider"
+import React, { useContext, useState } from "react"
 import { AnimalContext } from "./AnimalProvider"
+import { LocationContext } from "../location/LocationProvider"
 
 
-export default props => {
-    
+export const AnimalForm = ({ animal, customer, toggleEdit }) => {
     const { locations } = useContext(LocationContext)
-    const { addAnimal } = useContext(AnimalContext) //post call coming from animal provider
+    const { updateAnimal } = useContext(AnimalContext)
 
-    //Refs used in forms
-    const name = useRef() //referenceing the fieldset for the name
-    const location = useRef() //referenceing the fieldset for the location
-    const breed = useRef()
+    // Separate state variable to track the animal as it is edited
+    const [ updatedAnimal, setAnimal ] = useState(animal)
 
-    //Creates new object and saves it to the api
-    //makes sure that the animal object has the customerId and locationId foreign keys on it
-    const constructNewAnimal = () => {
-
-        const locationId = parseInt(location.current.value) //defining locationId into a variable mused be parsed since it is a string
-        const userId = parseInt(localStorage.getItem("kennel_customer")) //user id comes from local storage and is that "kennel_customer" must be parsed 
-       
-       //when user saves animal this function runs making new animal
-       //must be called in the click event on line 71 in the button 
-        const newAnimalObj = {
-            name: name.current.value,
-            breed: breed.current.value,
-            locationId: locationId, //line 18
-            customerId: userId //line 19
-
-        }
-        console.log(newAnimalObj)
-        //save animal to the api using addAnimal and animal object
-        addAnimal(newAnimalObj).then(props.toggle) //Post the newAnimalObj then add a toggle to close the modal (getting passed from AnimalList at the bottom inside the modal)
+    /*
+        When changing a state object or array, always create a new one
+        and change state instead of modifying current one
+    */
+    const handleControlledInputChange = (event) => {
+        const newAnimal = Object.assign({}, updatedAnimal)
+        newAnimal[event.target.name] = event.target.value
+        setAnimal(newAnimal)
     }
-    return (
-        <form className="AnimalForm">
-            <h2 className="AnimalForm__title">Name of Animal:</h2>
-            <fieldset>
-                <div className="form-group">
-                    <label htmlFor="animalName">Animal name: </label>
-                    <input
-                        type="text"
-                        id="animalName"
-                        ref={name}
-                        required
-                        autoFocus
-                        className="form-control"
-                        placeholder="Animal name"
-                    />
-                </div>
-            </fieldset>
 
+    const editAnimal = () => {
+        const locationId = parseInt(updatedAnimal.locationId)
+
+        if (locationId === 0) {
+            window.alert("Please select a location")
+        } else {
+            updateAnimal({
+                id: updatedAnimal.id,
+                name: updatedAnimal.name,
+                breed: updatedAnimal.breed,
+                locationId: locationId,
+                customerId: parseInt(localStorage.getItem("kennel_customer"))
+            })
+                .then(toggleEdit)
+        }
+    }
+
+    return (
+        <form className="animalForm">
             <fieldset>
                 <div className="form-group">
-                    <label htmlFor="animalBreed">Breed of Animal: </label>
-                    <input
-                        type="text"
-                        id="animalBreed"
-                        ref={breed}
-                        required
-                        autoFocus
-                        className="form-control"
-                        placeholder="Animal Breed"
+                    <label htmlFor="name">Animal name: </label>
+                    <input type="text" name="name" required autoFocus className="form-control"
+                        placeholder="Animal name"
+                        defaultValue={animal.name}
+                        onChange={handleControlledInputChange}
                     />
                 </div>
             </fieldset>
-          
             <fieldset>
                 <div className="form-group">
-                    <label htmlFor="location">Assign to location: </label>
-                    <select
-                        defaultValue=""
-                        name="location"
-                        ref={location}
-                        id="animalLocation"
-                        className="form-control"
-                    >
+                    <label htmlFor="breed">Animal breed: </label>
+                    <input type="text" name="breed" required className="form-control"
+                        placeholder="Animal breed"
+                        defaultValue={animal.breed}
+                        onChange={handleControlledInputChange}
+                    />
+                </div>
+            </fieldset>
+            <fieldset>
+                <div className="form-group">
+                    <label htmlFor="locationId">Location: </label>
+                    <select name="locationId" className="form-control"
+                        defaultValue={animal.locationId}
+                        onChange={handleControlledInputChange}>
+
                         <option value="0">Select a location</option>
                         {locations.map(e => (
                             <option key={e.id} value={e.id}>
@@ -85,16 +75,20 @@ export default props => {
                     </select>
                 </div>
             </fieldset>
-            <button type="submit"
-                onClick={
-                    evt => {
-                        evt.preventDefault() // Prevent browser from submitting the form
-                      // create the animal function goes here
-                      constructNewAnimal()
-                    }
-                }
-                className="btn btn-primary">
-                Admit Animal
+            <fieldset>
+                <div className="form-group">
+                    <label htmlFor="customer">Customer:</label>
+                    <input type="text" name="customer" disabled className="form-control"
+                        defaultValue={customer.name}
+                    />
+                </div>
+            </fieldset>
+            <button type="submit" className="btn btn-primary"
+                onClick={evt => {
+                    evt.preventDefault()
+                    editAnimal()
+                }}>
+                Save Updates
             </button>
         </form>
     )
